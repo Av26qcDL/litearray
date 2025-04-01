@@ -6,6 +6,7 @@ import (
 )
 
 // AddArrays adds multiple arrays element-wise and supports optional rounding to a specified precision.
+
 func AddArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -46,6 +47,8 @@ func AddArrays(precision int, arrays ...[]float64) ([]float64, error) {
 
 	return result, nil
 }
+
+// SubtractArrays subtracts multiple arrays element-wise and supports optional rounding to a specified precision.
 
 func SubtractArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
