@@ -282,3 +282,42 @@ func ModuloArrays(precision int, dividend []float64, divisor []float64) ([]float
 
 	return result, nil
 }
+
+func LogArrays(precision int, base []float64, dividend []float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(base) == 0 || len(dividend) == 0 {
+		return nil, fmt.Errorf("both base and dividend arrays must be provided")
+	}
+
+	// Check that all arrays are the same length
+	if len(base) != len(dividend) {
+		return nil, fmt.Errorf("base and dividend arrays must be of the same length")
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, len(base))
+
+	// Loop through the arrays and perform the logarithm operation
+	for i := range base {
+		if base[i] <= 0 || dividend[i] <= 0 {
+			return nil, fmt.Errorf("logarithm undefined for non-positive values at index %d", i)
+		}
+		result[i] = math.Log(dividend[i]) / math.Log(base[i])
+	}
+
+	// Apply rounding if precision is non-negative
+	if precision >= 0 {
+		for i := range result {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			fmt.Printf("Before Rounding: result[%d] = %f\n", i, result[i])
+			result[i] = math.Round(result[i]*factor) / factor
+			fmt.Printf("After Rounding: result[%d] = %f\n", i, result[i])
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return result, nil
+}
