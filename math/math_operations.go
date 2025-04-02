@@ -242,3 +242,43 @@ func PowerArrays(precision int, base []float64, exponent []float64) ([]float64, 
 
 	return result, nil
 }
+
+// ModuloArrays calculates the modulo of two arrays element-wise and supports optional rounding to a specified precision.
+func ModuloArrays(precision int, dividend []float64, divisor []float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(dividend) == 0 || len(divisor) == 0 {
+		return nil, fmt.Errorf("both dividend and divisor arrays must be provided")
+	}
+
+	// Check that all arrays are the same length
+	if len(dividend) != len(divisor) {
+		return nil, fmt.Errorf("dividend and divisor arrays must be of the same length")
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, len(dividend))
+
+	// Loop through the arrays and perform the modulo operation
+	for i := range dividend {
+		if divisor[i] == 0 {
+			return nil, fmt.Errorf("division by zero at index %d", i)
+		}
+		result[i] = math.Mod(dividend[i], divisor[i])
+	}
+
+	// Apply rounding if precision is non-negative
+	if precision >= 0 {
+		for i := range result {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			fmt.Printf("Before Rounding: result[%d] = %f\n", i, result[i])
+			result[i] = math.Round(result[i]*factor) / factor
+			fmt.Printf("After Rounding: result[%d] = %f\n", i, result[i])
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return result, nil
+}
