@@ -323,9 +323,9 @@ func LogArrays(precision int, base []float64, dividend []float64) ([]float64, er
 }
 
 func SqrtArrays(precision int, arrays ...[]float64) ([]float64, error) {
-	// Ensure at least one array is provided
-	if len(arrays) == 0 {
-		return nil, fmt.Errorf("at least one array is required to perform square root")
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required to perform addition")
 	}
 
 	// Check that all arrays are the same length
@@ -342,14 +342,23 @@ func SqrtArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Create a result slice initialized to zero
 	result := make([]float64, length)
 
-	// Loop through the arrays and perform the square root operation
+	// Loop through the arrays and sum the elements element-wise
 	for _, array := range arrays {
 		for i := range array {
-			if array[i] < 0 {
-				return nil, fmt.Errorf("square root undefined for negative values at index %d", i)
-			}
-			result[i] = math.Sqrt(array[i])
+			result[i] += array[i]
 		}
+	}
+
+	// Check for negative values in the result
+	for i, value := range result {
+		if value < 0 {
+			return nil, fmt.Errorf("cannot calculate square root of a negative value at index %d: %f", i, value)
+		}
+	}
+
+	// Take the square root of the summed result
+	for i := range result {
+		result[i] = math.Sqrt(result[i])
 	}
 
 	// Apply rounding if precision is non-negative

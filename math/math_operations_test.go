@@ -307,10 +307,11 @@ func TestLogArrays(t *testing.T) {
 
 func TestSqrtArrays(t *testing.T) {
 	// Test case 1: Regular array, precision = 2
-	arr1 := []float64{4.00000, 9.00000, 16.00000}
-	expected := []float64{2.00, 3.00, 4.00}
+	arr1 := []float64{4.00000, 8.00000, 56.00000}
+	arr2 := []float64{12.00000, 1.00000, 8.00000}
+	expected := []float64{4.00, 3.00, 8.00}
 
-	result, err := SqrtArrays(2, arr1)
+	result, err := SqrtArrays(2, arr1, arr2)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
@@ -320,10 +321,11 @@ func TestSqrtArrays(t *testing.T) {
 	}
 
 	// Test case 2: Precision = -1 (no rounding)
-	arr1 = []float64{4.00000, 9.00000, 16.00000}
-	expected = []float64{2.0, 3.0, 4.0}
+	arr1 = []float64{4.00000, 8.00000, 56.00000}
+	arr2 = []float64{12.00000, 1.00000, 8.00000}
+	expected = []float64{4.00, 3.00, 8.00}
 
-	result, err = SqrtArrays(-1, arr1)
+	result, err = SqrtArrays(-1, arr1, arr2)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
@@ -333,15 +335,15 @@ func TestSqrtArrays(t *testing.T) {
 	}
 
 	// Test case 3: Negative values in the array
-	arr2 := []float64{-1.0, 4.0, 9.0}
-	_, err = SqrtArrays(2, arr2)
+	arr3 := []float64{-1.0, 4.0, 9.0}
+	_, err = SqrtArrays(2, arr3)
 	if err == nil {
 		t.Error("Expected an error for negative values, got none")
 	}
 
 	// Test case 4: Empty array
-	arr3 := []float64{}
-	_, err = SqrtArrays(2, arr3)
+	arr4 := []float64{}
+	_, err = SqrtArrays(2, arr4)
 	if err == nil {
 		t.Error("Expected an error for an empty array, got none")
 	}
