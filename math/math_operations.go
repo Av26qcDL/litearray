@@ -321,3 +321,48 @@ func LogArrays(precision int, base []float64, dividend []float64) ([]float64, er
 
 	return result, nil
 }
+
+func SqrtArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Ensure at least one array is provided
+	if len(arrays) == 0 {
+		return nil, fmt.Errorf("at least one array is required to perform square root")
+	}
+
+	// Check that all arrays are the same length
+	length := len(arrays[0])
+	if length == 0 {
+		return nil, fmt.Errorf("array cannot be empty")
+	}
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, length)
+
+	// Loop through the arrays and perform the square root operation
+	for _, array := range arrays {
+		for i := range array {
+			if array[i] < 0 {
+				return nil, fmt.Errorf("square root undefined for negative values at index %d", i)
+			}
+			result[i] = math.Sqrt(array[i])
+		}
+	}
+
+	// Apply rounding if precision is non-negative
+	if precision >= 0 {
+		for i := range result {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			result[i] = math.Round(result[i]*factor) / factor
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return result, nil
+}

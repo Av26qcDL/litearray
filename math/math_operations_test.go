@@ -305,6 +305,48 @@ func TestLogArrays(t *testing.T) {
 	}
 }
 
+func TestSqrtArrays(t *testing.T) {
+	// Test case 1: Regular array, precision = 2
+	arr1 := []float64{4.00000, 9.00000, 16.00000}
+	expected := []float64{2.00, 3.00, 4.00}
+
+	result, err := SqrtArrays(2, arr1)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices with a standard tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Precision = -1 (no rounding)
+	arr1 = []float64{4.00000, 9.00000, 16.00000}
+	expected = []float64{2.0, 3.0, 4.0}
+
+	result, err = SqrtArrays(-1, arr1)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices again with tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 3: Negative values in the array
+	arr2 := []float64{-1.0, 4.0, 9.0}
+	_, err = SqrtArrays(2, arr2)
+	if err == nil {
+		t.Error("Expected an error for negative values, got none")
+	}
+
+	// Test case 4: Empty array
+	arr3 := []float64{}
+	_, err = SqrtArrays(2, arr3)
+	if err == nil {
+		t.Error("Expected an error for an empty array, got none")
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {
