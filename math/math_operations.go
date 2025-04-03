@@ -368,9 +368,9 @@ func SqrtArrays(precision int, arrays ...[]float64) ([]float64, error) {
 }
 
 func AbsArrays(precision int, arrays ...[]float64) ([]float64, error) {
-	// Ensure at least one array is provided
-	if len(arrays) == 0 {
-		return nil, fmt.Errorf("at least one array is required to perform absolute value")
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required to perform addition")
 	}
 
 	// Check that all arrays are the same length
@@ -387,11 +387,62 @@ func AbsArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Create a result slice initialized to zero
 	result := make([]float64, length)
 
-	// Loop through the arrays and perform the absolute value operation
+	// Loop through the arrays and sum the elements element-wise
 	for _, array := range arrays {
 		for i := range array {
-			result[i] = math.Abs(array[i])
+			result[i] += array[i]
 		}
+	}
+
+	// Take the absolute value of the summed result
+	for i := range result {
+		result[i] = math.Abs(result[i])
+	}
+
+	// Apply rounding if precision is non-negative
+	if precision >= 0 {
+		for i := range result {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			result[i] = math.Round(result[i]*factor) / factor
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return result, nil
+}
+
+func MeanArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required to perform addition")
+	}
+
+	// Check that all arrays are the same length
+	length := len(arrays[0])
+	if length == 0 {
+		return nil, fmt.Errorf("array cannot be empty")
+	}
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, length)
+
+	// Loop through the arrays and perform the mean operation
+	for _, array := range arrays {
+		for i := range array {
+			result[i] += array[i]
+		}
+	}
+
+	for i := range result {
+		result[i] /= float64(len(arrays))
 	}
 
 	// Apply rounding if precision is non-negative

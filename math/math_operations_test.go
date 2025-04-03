@@ -350,9 +350,10 @@ func TestSqrtArrays(t *testing.T) {
 func TestAbsArrays(t *testing.T) {
 	// Test case 1: Regular array, precision = 2
 	arr1 := []float64{-1.00000, -2.00000, 3.00000}
-	expected := []float64{1.00, 2.00, 3.00}
+	arr2 := []float64{-2.00000, -3.00000, 3.00000}
+	expected := []float64{3.00, 5.00, 6.00}
 
-	result, err := AbsArrays(2, arr1)
+	result, err := AbsArrays(2, arr1, arr2)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
@@ -363,9 +364,10 @@ func TestAbsArrays(t *testing.T) {
 
 	// Test case 2: Precision = -1 (no rounding)
 	arr1 = []float64{-1.00000, -2.00000, 3.00000}
-	expected = []float64{1.0, 2.0, 3.0}
+	arr2 = []float64{-2.00000, -3.00000, 3.00000}
+	expected = []float64{3.00, 5.00, 6.00}
 
-	result, err = AbsArrays(-1, arr1)
+	result, err = AbsArrays(-1, arr1, arr2)
 	if err != nil {
 		t.Errorf("Unexpected error: %v", err)
 	}
@@ -379,6 +381,50 @@ func TestAbsArrays(t *testing.T) {
 	_, err = AbsArrays(2, arr3)
 	if err == nil {
 		t.Error("Expected an error for an empty array, got none")
+	}
+}
+
+func TestMeanArrays(t *testing.T) {
+	// Test case 1: Regular array, precision = 2
+	arr1 := []float64{1.00000, 2.00000, 3.00000}
+	arr2 := []float64{4.00000, 5.00000, 6.00000}
+	expected := []float64{2.50, 3.50, 4.50}
+
+	result, err := MeanArrays(2, arr1, arr2)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices with a standard tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Precision = -1 (no rounding)
+	arr1 = []float64{1.00000, 2.00000, 3.00000}
+	arr2 = []float64{4.00000, 5.00000, 6.00000}
+	expected = []float64{2.50, 3.50, 4.50}
+
+	result, err = MeanArrays(-1, arr1, arr2)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices again with tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 3: Empty array
+	arr3 := []float64{}
+	_, err = MeanArrays(2, arr3)
+	if err == nil {
+		t.Error("Expected an error for an empty array, got none")
+	}
+
+	// Test case 4: Mismatched array lengths
+	arr4 := []float64{1.0}
+	_, err = LogArrays(2, arr1, arr4)
+	if err == nil {
+		t.Error("Expected an error for mismatched array lengths, got none")
 	}
 }
 
