@@ -430,6 +430,50 @@ func TestMeanArrays(t *testing.T) {
 	}
 }
 
+func TestMedianArrays(t *testing.T) {
+	// Test case 1: Regular array, precision = 2
+	arr1 := []float64{1.00000, 2.00000, 3.00000}
+	arr2 := []float64{4.00000, 5.00000, 6.00000}
+	expected := []float64{3.50}
+
+	result, err := MedianArrays(2, arr1, arr2)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices with a standard tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Precision = -1 (no rounding)
+	arr1 = []float64{1.00000, 2.00000, 3.00000}
+	arr2 = []float64{4.00000, 5.00000, 6.00000}
+	expected = []float64{3.50}
+
+	result, err = MedianArrays(-1, arr1, arr2)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices again with tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 3: Empty array
+	arr3 := []float64{}
+	_, err = MedianArrays(2, arr3)
+	if err == nil {
+		t.Error("Expected an error for an empty array, got none")
+	}
+
+	// Test case 4: Mismatched array lengths
+	arr4 := []float64{1.0}
+	_, err = LogArrays(2, arr1, arr4)
+	if err == nil {
+		t.Error("Expected an error for mismatched array lengths, got none")
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {

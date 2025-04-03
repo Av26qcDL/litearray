@@ -3,6 +3,7 @@ package litearray
 import (
 	"fmt"
 	"math"
+	"sort"
 )
 
 // AddArrays adds multiple arrays element-wise and supports optional rounding to a specified precision.
@@ -467,4 +468,58 @@ func MeanArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	}
 
 	return result, nil
+}
+
+func MedianArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required to perform addition")
+	}
+
+	// Check that all arrays are the same length
+	length := len(arrays[0])
+	if length == 0 {
+		return nil, fmt.Errorf("array cannot be empty")
+	}
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, length)
+
+	// Loop through the arrays and sum the elements element-wise
+	for _, array := range arrays {
+		for i := range array {
+			result[i] += array[i]
+		}
+	}
+
+	// Divide each element by the number of arrays to calculate the mean
+	for i := range result {
+		result[i] /= float64(len(arrays))
+	}
+
+	// Sort the result slice to find the median
+	sort.Float64s(result)
+	mid := len(result) / 2
+
+	// Calculate the median
+	var median float64
+	if len(result)%2 == 0 {
+		median = (result[mid-1] + result[mid]) / 2
+	} else {
+		median = result[mid]
+	}
+
+	// Apply rounding if precision is non-negative
+	if precision >= 0 {
+		factor := math.Pow(10, float64(precision))
+		median = math.Round(median*factor) / factor
+	}
+
+	// Return the median as a single-element slice
+	return []float64{median}, nil
 }
