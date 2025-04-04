@@ -7,7 +7,6 @@ import (
 )
 
 // AddArrays adds multiple arrays element-wise and supports optional rounding to a specified precision.
-
 func AddArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -50,7 +49,6 @@ func AddArrays(precision int, arrays ...[]float64) ([]float64, error) {
 }
 
 // SubtractArrays subtracts multiple arrays element-wise and supports optional rounding to a specified precision.
-
 func SubtractArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -102,7 +100,6 @@ func SubtractArrays(precision int, arrays ...[]float64) ([]float64, error) {
 }
 
 // MultiplyArrays multiplies multiple arrays element-wise and supports optional rounding to a specified precision.
-
 func MultiplyArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -153,7 +150,6 @@ func MultiplyArrays(precision int, arrays ...[]float64) ([]float64, error) {
 }
 
 // DivideArrays divides multiple arrays element-wise and supports optional rounding to a specified precision.
-
 func DivideArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -207,7 +203,6 @@ func DivideArrays(precision int, arrays ...[]float64) ([]float64, error) {
 }
 
 // PowerArrays raises each element of the base array to the corresponding element of the exponent array and supports optional rounding to a specified precision.
-
 func PowerArrays(precision int, base []float64, exponent []float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(base) == 0 || len(exponent) == 0 {
@@ -284,6 +279,7 @@ func ModuloArrays(precision int, dividend []float64, divisor []float64) ([]float
 	return result, nil
 }
 
+// LogArrays calculates the logarithm of each element in the dividend array with respect to the base array and supports optional rounding to a specified precision.
 func LogArrays(precision int, base []float64, dividend []float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(base) == 0 || len(dividend) == 0 {
@@ -323,6 +319,7 @@ func LogArrays(precision int, base []float64, dividend []float64) ([]float64, er
 	return result, nil
 }
 
+// SqrtArrays calculates the square root of the sum of multiple arrays element-wise and supports optional rounding to a specified precision.
 func SqrtArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -377,6 +374,7 @@ func SqrtArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	return result, nil
 }
 
+// AbsArrays calculates the absolute value of the sum of multiple arrays element-wise and supports optional rounding to a specified precision.
 func AbsArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -424,6 +422,7 @@ func AbsArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	return result, nil
 }
 
+// MeanArrays calculates the mean of multiple arrays element-wise and supports optional rounding to a specified precision.
 func MeanArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -470,6 +469,7 @@ func MeanArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	return result, nil
 }
 
+// MedianArrays calculates the median of multiple arrays element-wise and supports optional rounding to a specified precision.
 func MedianArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -603,6 +603,7 @@ func ModeMultipleArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	return modes, nil
 }
 
+// VarianceArrays calculates the variance of multiple arrays element-wise and supports optional rounding to a specified precision.
 func VarianceArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Ensure at least two arrays are provided
 	if len(arrays) < 2 {
@@ -662,6 +663,7 @@ func VarianceArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	return variance, nil
 }
 
+// StandardDeviationArrays calculates the standard deviation of multiple arrays element-wise and supports optional rounding to a specified precision.
 func StandardDeviationArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Calculate the variance using the VarianceArrays function
 	variance, err := VarianceArrays(precision, arrays...)
