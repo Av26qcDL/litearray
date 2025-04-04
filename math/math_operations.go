@@ -524,7 +524,7 @@ func MedianArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	return []float64{median}, nil
 }
 
-// findMode calculates the mode(s) of a slice of integers.
+// ModeArray calculates the mode(s) of a slice of integers.
 func ModeArray(nums []float64) []float64 {
 	counts := make(map[float64]float64)
 	maxCount := 0.00000
@@ -544,7 +544,7 @@ func ModeArray(nums []float64) []float64 {
 	return modes
 }
 
-// FindModeMultipleArrays calculates the mode(s) across multiple arrays of integers.
+// ModeMultipleArrays calculates the mode(s) across multiple arrays of integers.
 func ModeMultipleArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Check if any arrays are provided
 	if len(arrays) == 0 {
