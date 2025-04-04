@@ -689,3 +689,181 @@ func StandardDeviationArrays(precision int, arrays ...[]float64) ([]float64, err
 
 	return stdDev, nil
 }
+
+// MinArrays finds the minimum value in each element across multiple arrays.
+func MinArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required to perform addition")
+	}
+
+	// Check that all arrays are the same length
+	length := len(arrays[0])
+	if length == 0 {
+		return nil, fmt.Errorf("array cannot be empty")
+	}
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, length)
+
+	// Loop through the arrays and sum the elements element-wise
+	for _, array := range arrays {
+		for i := range array {
+			result[i] += array[i]
+		}
+	}
+
+	// Find the minimum value in each element
+	minValues := make([]float64, length)
+	for i := range result {
+		minValues[i] = math.Inf(1)
+	}
+
+	for _, array := range arrays {
+		for i := range array {
+			if array[i] < minValues[i] {
+				minValues[i] = array[i]
+			}
+		}
+	}
+
+	if precision >= 0 {
+		for i := range minValues {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			minValues[i] = math.Round(minValues[i]*factor) / factor
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return minValues, nil
+}
+
+// MaxArrays finds the maximum value in each element across multiple arrays.
+func MaxArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required to perform addition")
+	}
+
+	// Check that all arrays are the same length
+	length := len(arrays[0])
+	if length == 0 {
+		return nil, fmt.Errorf("array cannot be empty")
+	}
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, length)
+
+	// Loop through the arrays and sum the elements element-wise
+	for _, array := range arrays {
+		for i := range array {
+			result[i] += array[i]
+		}
+	}
+
+	// Find the maximum value in each element
+	maxValues := make([]float64, length)
+	for i := range result {
+		maxValues[i] = math.Inf(-1)
+	}
+
+	for _, array := range arrays {
+		for i := range array {
+			if array[i] > maxValues[i] {
+				maxValues[i] = array[i]
+			}
+		}
+	}
+
+	if precision >= 0 {
+		for i := range maxValues {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			maxValues[i] = math.Round(maxValues[i]*factor) / factor
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return maxValues, nil
+}
+
+// RangeArrays calculates the range (max - min) of multiple arrays element-wise and supports optional rounding to a specified precision.
+func RangeArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required to perform addition")
+	}
+
+	// Check that all arrays are the same length
+	length := len(arrays[0])
+	if length == 0 {
+		return nil, fmt.Errorf("array cannot be empty")
+	}
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, length)
+
+	// Loop through the arrays and sum the elements element-wise
+	for _, array := range arrays {
+		for i := range array {
+			result[i] += array[i]
+		}
+	}
+
+	// Find the minimum and maximum values in each element
+	minValues := make([]float64, length)
+	maxValues := make([]float64, length)
+	for i := range result {
+		minValues[i] = math.Inf(1)
+		maxValues[i] = math.Inf(-1)
+	}
+
+	for _, array := range arrays {
+		for i := range array {
+			if array[i] < minValues[i] {
+				minValues[i] = array[i]
+			}
+			if array[i] > maxValues[i] {
+				maxValues[i] = array[i]
+			}
+		}
+	}
+
+	rangeValues := make([]float64, length)
+	for i := range result {
+		rangeValues[i] = maxValues[i] - minValues[i]
+	}
+
+	if precision >= 0 {
+		for i := range rangeValues {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			rangeValues[i] = math.Round(rangeValues[i]*factor) / factor
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return rangeValues, nil
+}

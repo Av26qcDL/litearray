@@ -601,6 +601,131 @@ func TestStandardDeviationArrays(t *testing.T) {
 	}
 }
 
+func TestMinArrays(t *testing.T) {
+	// Test case 1: Regular array, precision = 2
+	arrays := [][]float64{{1.00000, 2.00000, 3.00000}, {4.00000, 5.00000, 6.00000}, {7.00000, 8.00000, 9.00000}}
+	expected := []float64{1.00, 2.00, 3.00}
+
+	result, err := MinArrays(2, arrays...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices with a standard tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Precision = -1 (no rounding)
+	arrays = [][]float64{{1.00000, 2.00000, 3.00000}, {4.00000, 5.00000, 6.00000}, {7.00000, 8.00000, 9.00000}}
+	expected = []float64{1.0, 2.0, 3.0} // Updated for clarity
+
+	result, err = MinArrays(-1, arrays...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices again with tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 3: Empty array
+	arr3 := []float64{}
+	_, err = MinArrays(2, arr3)
+	if err == nil {
+		t.Error("Expected an error for an empty array, got none")
+	}
+
+	// Test case 4: Mismatched array lengths
+	arr4 := []float64{1.0}
+	_, err = MinArrays(2, arrays[0], arr4)
+	if err == nil {
+		t.Error("Expected an error for mismatched array lengths, got none")
+	}
+}
+func TestMaxArrays(t *testing.T) {
+	// Test case 1: Regular array, precision = 2
+	arrays := [][]float64{{1.00000, 2.00000, 3.00000}, {4.00000, 5.00000, 6.00000}, {7.00000, 8.00000, 9.00000}}
+	expected := []float64{7.00, 8.00, 9.00}
+
+	result, err := MaxArrays(2, arrays...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices with a standard tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Precision = -1 (no rounding)
+	arrays = [][]float64{{1.00000, 2.00000, 3.00000}, {4.00000, 5.00000, 6.00000}, {7.00000, 8.00000, 9.00000}}
+	expected = []float64{7.0, 8.0, 9.0} // Updated for clarity
+
+	result, err = MaxArrays(-1, arrays...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices again with tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 3: Empty array
+	arr3 := []float64{}
+	_, err = MaxArrays(2, arr3)
+	if err == nil {
+		t.Error("Expected an error for an empty array, got none")
+	}
+
+	// Test case 4: Mismatched array lengths
+	arr4 := []float64{1.0}
+	_, err = MaxArrays(2, arrays[0], arr4)
+	if err == nil {
+		t.Error("Expected an error for mismatched array lengths, got none")
+	}
+}
+
+func TestRangeArrays(t *testing.T) {
+	// Test case 1: Regular array, precision = 2
+	arrays := [][]float64{{1.50000, 2.30000, 3.70000}, {0.90000, 2.80000, 3.10000}, {1.20000, 1.90000, 4.00000}}
+	expected := []float64{0.60, 0.90, 0.90}
+
+	result, err := RangeArrays(2, arrays...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices with a standard tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Precision = -1 (no rounding)
+	arrays = [][]float64{{1.50000, 2.30000, 3.70000}, {0.90000, 2.80000, 3.10000}, {1.20000, 1.90000, 4.00000}}
+	expected = []float64{0.60, 0.90, 0.90} // Updated for clarity
+
+	result, err = RangeArrays(-1, arrays...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices again with tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 3: Empty array
+	arr3 := []float64{}
+	_, err = RangeArrays(2, arr3)
+	if err == nil {
+		t.Error("Expected an error for an empty array, got none")
+	}
+
+	// Test case 4: Mismatched array lengths
+	arr4 := []float64{1.0}
+	_, err = RangeArrays(2, arrays[0], arr4)
+	if err == nil {
+		t.Error("Expected an error for mismatched array lengths, got none")
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {
