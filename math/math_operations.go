@@ -661,3 +661,31 @@ func VarianceArrays(precision int, arrays ...[]float64) ([]float64, error) {
 
 	return variance, nil
 }
+
+func StandardDeviationArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Calculate the variance using the VarianceArrays function
+	variance, err := VarianceArrays(precision, arrays...)
+	if err != nil {
+		return nil, err
+	}
+
+	// Take the square root of each variance value to calculate the standard deviation
+	stdDev := make([]float64, len(variance))
+	for i, v := range variance {
+		stdDev[i] = math.Sqrt(v)
+	}
+
+	// Apply rounding if precision is non-negative
+	if precision >= 0 {
+		for i := range stdDev {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			stdDev[i] = math.Round(stdDev[i]*factor) / factor
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return stdDev, nil
+}
