@@ -424,7 +424,7 @@ func TestMeanArrays(t *testing.T) {
 
 	// Test case 4: Mismatched array lengths
 	arr4 := []float64{1.0}
-	_, err = LogArrays(2, arr1, arr4)
+	_, err = MeanArrays(2, arr1, arr4)
 	if err == nil {
 		t.Error("Expected an error for mismatched array lengths, got none")
 	}
@@ -468,7 +468,50 @@ func TestMedianArrays(t *testing.T) {
 
 	// Test case 4: Mismatched array lengths
 	arr4 := []float64{1.0}
-	_, err = LogArrays(2, arr1, arr4)
+	_, err = MedianArrays(2, arr1, arr4)
+	if err == nil {
+		t.Error("Expected an error for mismatched array lengths, got none")
+	}
+}
+
+func TestModeMultipleArrays(t *testing.T) {
+	// Test case 1: Regular array, precision = 2
+	arr1 := [][]float64{{1.00000, 2.00000, 3.00000}, {4.00000, 2.00000, 2.00000}, {8.00000, 2.00000, 2.00000}}
+	expected := []float64{2.00}
+
+	// Correctly handle the two return values
+	result, err := ModeMultipleArrays(2, arr1...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices with a standard tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Precision = -1 (no rounding)
+	arr1 = [][]float64{{1.00000, 2.00000, 3.00000}, {4.00000, 2.00000, 2.00000}, {8.00000, 2.00000, 2.00000}}
+	expected = []float64{2.00}
+
+	result, err = ModeMultipleArrays(-1, arr1...)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	// Use compareSlices again with tolerance
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 3: Empty array
+	arr3 := []float64{}
+	_, err = ModeMultipleArrays(2, arr3)
+	if err == nil {
+		t.Error("Expected an error for an empty array, got none")
+	}
+
+	// Test case 4: Mismatched array lengths
+	arr4 := []float64{1.0}
+	_, err = LogArrays(2, arr3, arr4)
 	if err == nil {
 		t.Error("Expected an error for mismatched array lengths, got none")
 	}

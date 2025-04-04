@@ -523,3 +523,82 @@ func MedianArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	// Return the median as a single-element slice
 	return []float64{median}, nil
 }
+
+// findMode calculates the mode(s) of a slice of integers.
+func ModeArray(nums []float64) []float64 {
+	counts := make(map[float64]float64)
+	maxCount := 0.00000
+	for _, num := range nums {
+		counts[num]++
+		if counts[num] > maxCount {
+			maxCount = counts[num]
+		}
+	}
+
+	var modes []float64
+	for num, count := range counts {
+		if count == maxCount {
+			modes = append(modes, num)
+		}
+	}
+	return modes
+}
+
+// FindModeMultipleArrays calculates the mode(s) across multiple arrays of integers.
+func ModeMultipleArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Check if any arrays are provided
+	if len(arrays) == 0 {
+		return nil, fmt.Errorf("no arrays provided")
+	}
+
+	// Check if all arrays are empty
+	isAllEmpty := true
+	for _, arr := range arrays {
+		if len(arr) > 0 {
+			isAllEmpty = false
+			break
+		}
+	}
+	if isAllEmpty {
+		return nil, fmt.Errorf("all arrays are empty")
+	}
+
+	// Combine all arrays into a single slice
+	combined := []float64{}
+	for _, arr := range arrays {
+		combined = append(combined, arr...)
+	}
+
+	// Use a map to count occurrences of each number
+	counts := make(map[float64]int)
+	maxCount := 0
+	for _, num := range combined {
+		counts[num]++
+		if counts[num] > maxCount {
+			maxCount = counts[num]
+		}
+	}
+
+	// Find all numbers with the maximum count
+	var modes []float64
+	for num, count := range counts {
+		if count == maxCount {
+			modes = append(modes, num)
+		}
+	}
+
+	// Apply rounding to the modes if precision is non-negative
+	if precision >= 0 {
+		factor := math.Pow(10, float64(precision))
+		for i := range modes {
+			modes[i] = math.Round(modes[i]*factor) / factor
+		}
+	}
+
+	// Validate precision range
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return modes, nil
+}
