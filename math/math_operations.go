@@ -497,7 +497,7 @@ func MedianArrays(precision int, arrays ...[]float64) ([]float64, error) {
 		}
 	}
 
-	// Divide each element by the number of arrays to calculate the mean
+	// Divide each element by the number of arrays to calculate the median
 	for i := range result {
 		result[i] /= float64(len(arrays))
 	}
@@ -601,4 +601,63 @@ func ModeMultipleArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	}
 
 	return modes, nil
+}
+
+func VarianceArrays(precision int, arrays ...[]float64) ([]float64, error) {
+	// Ensure at least two arrays are provided
+	if len(arrays) < 2 {
+		return nil, fmt.Errorf("at least two arrays are required")
+	}
+
+	// Check that all arrays are the same length
+	length := len(arrays[0])
+	if length == 0 {
+		return nil, fmt.Errorf("array cannot be empty")
+	}
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Create a result slice initialized to zero
+	result := make([]float64, length)
+
+	// Loop through the arrays and sum the elements element-wise
+	for _, array := range arrays {
+		for i := range array {
+			result[i] += array[i]
+		}
+	}
+
+	// Calculate the mean for each element
+	for i := range result {
+		result[i] /= float64(len(arrays))
+	}
+
+	// Calculate the variance for each element
+	variance := make([]float64, length)
+	for _, array := range arrays {
+		for i := range array {
+			diff := array[i] - result[i]
+			variance[i] += diff * diff
+		}
+	}
+
+	for i := range variance {
+		variance[i] /= float64(len(arrays))
+	}
+
+	if precision >= 0 {
+		for i := range variance {
+			factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+			variance[i] = math.Round(variance[i]*factor) / factor
+		}
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	return variance, nil
 }
