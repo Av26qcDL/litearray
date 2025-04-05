@@ -981,6 +981,7 @@ func TransposeMatrix(precision int, matrix [][]float64) ([][]float64, error) {
 	return result, nil
 }
 
+// DeterminantMatrix calculates the determinant of a square matrix using recursion.
 func DeterminantMatrix(matrix [][]float64) (float64, error) {
 	// Check if the matrix is square
 	if len(matrix) == 0 || len(matrix) != len(matrix[0]) {
