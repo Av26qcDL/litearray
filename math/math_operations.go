@@ -850,7 +850,7 @@ func RangeArrays(precision int, arrays ...[]float64) ([]float64, error) {
 			}
 		}
 	}
-
+	// Calculate the range (max - min)
 	rangeValues := make([]float64, length)
 	for i := range result {
 		rangeValues[i] = maxValues[i] - minValues[i]
@@ -868,4 +868,60 @@ func RangeArrays(precision int, arrays ...[]float64) ([]float64, error) {
 	}
 
 	return rangeValues, nil
+}
+
+// PercentileArrays calculates the percentile of multiple arrays element-wise and supports optional rounding to a specified precision.
+func PercentileArrays(precision int, percentile float64, arrays ...[]float64) ([]float64, error) {
+	if percentile < 0 || percentile > 100 {
+		return nil, fmt.Errorf("percentile must be between 0 and 100")
+	}
+
+	if precision > 10 {
+		return nil, fmt.Errorf("precision too high; must be between -1 and 10")
+	}
+
+	// Check that all arrays are the same length
+	if len(arrays) == 0 {
+		return nil, fmt.Errorf("no arrays provided")
+	}
+
+	length := len(arrays[0])
+	for _, array := range arrays {
+		if len(array) != length {
+			return nil, fmt.Errorf("all arrays must be of the same length")
+		}
+	}
+
+	// Check that all arrays are non-empty
+	for i, arr := range arrays {
+		if len(arr) == 0 {
+			return nil, fmt.Errorf("array at index %d cannot be empty", i)
+		}
+	}
+
+	// Calculate the percentile for each array
+	results := make([]float64, len(arrays))
+	for i, arr := range arrays {
+		sort.Float64s(arr)
+		index := (percentile / 100) * float64(len(arr)-1)
+		intIndex := int(index)
+		fractionalPart := index - float64(intIndex)
+
+		var result float64
+		if intIndex+1 < len(arr) {
+			result = arr[intIndex] + fractionalPart*(arr[intIndex+1]-arr[intIndex])
+		} else {
+			result = arr[intIndex]
+		}
+
+		// Apply rounding if precision is non-negative
+		if precision >= 0 {
+			factor := math.Pow(10, float64(precision))
+			result = math.Round(result*factor) / factor
+		}
+
+		results[i] = result
+	}
+
+	return results, nil
 }
