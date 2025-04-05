@@ -839,7 +839,7 @@ func TestDeterminantMatrix(t *testing.T) {
 func TestInversionMatrix(t *testing.T) {
 	// Test case 1: Regular matrix
 	matrix := [][]float64{{2, 3}, {4, 5}}
-	expected := [][]float64{{-5.0, 3.0}, {4.0, -2.0}}
+	expected := [][]float64{{-2.5, 1.5}, {2, -1}}
 
 	result, err := InversionMatrix(matrix)
 	if err != nil {
