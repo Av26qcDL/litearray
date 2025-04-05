@@ -835,6 +835,28 @@ func TestDeterminantMatrix(t *testing.T) {
 	}
 }
 
+// TestInversionMatrix tests the InversionMatrix function.
+func TestInversionMatrix(t *testing.T) {
+	// Test case 1: Regular matrix
+	matrix := [][]float64{{2, 3}, {4, 5}}
+	expected := [][]float64{{-5.0, 3.0}, {4.0, -2.0}}
+
+	result, err := InversionMatrix(matrix)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if !compareSlices(result[0], expected[0], 0.0001) || !compareSlices(result[1], expected[1], 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Empty matrix
+	matrix = [][]float64{}
+	_, err = InversionMatrix(matrix)
+	if err == nil || err.Error() != "matrix must be square and non-empty" {
+		t.Errorf("Expected error 'matrix must be square and non-empty', got %v", err)
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {

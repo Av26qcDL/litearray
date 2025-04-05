@@ -1020,3 +1020,66 @@ func DeterminantMatrix(matrix [][]float64) (float64, error) {
 
 	return det, nil
 }
+
+// InversionMatrix calculates the inverse of a square matrix using Gaussian elimination.
+func InversionMatrix(matrix [][]float64) ([][]float64, error) {
+	// Check if the matrix is square
+	if len(matrix) == 0 || len(matrix) != len(matrix[0]) {
+		return nil, fmt.Errorf("matrix must be square and non-empty")
+	}
+	// Calculate determinant and verify it's not zero
+	det, err := DeterminantMatrix(matrix)
+	if err != nil {
+		return nil, err
+	}
+	if det == 0 {
+		return nil, fmt.Errorf("matrix is singular and cannot be inverted")
+	}
+	// Create an augmented matrix [A|I] with A on left, identity on right
+	augmented := make([][]float64, len(matrix))
+	for i := range augmented {
+		augmented[i] = make([]float64, len(matrix)*2)
+		copy(augmented[i], matrix[i])
+		for j := 0; j < len(matrix); j++ {
+			if i == j {
+				augmented[i][j+len(matrix)] = 1
+			} else {
+				augmented[i][j+len(matrix)] = 0
+			}
+		}
+	}
+	// Apply row operations to transform left side to identity
+	for i := 0; i < len(matrix); i++ {
+		// Find pivot
+		pivot := augmented[i][i]
+		if pivot == 0 {
+			return nil, fmt.Errorf("matrix is singular and cannot be inverted")
+		}
+		for j := 0; j < len(augmented[i]); j++ {
+			augmented[i][j] /= pivot
+		}
+		// Eliminate other rows
+		for k := 0; k < len(matrix); k++ {
+			if k != i {
+				factor := augmented[k][i]
+				for j := 0; j < len(augmented[k]); j++ {
+					augmented[k][j] -= factor * augmented[i][j]
+				}
+			}
+		}
+	}
+	// The right side will become the inverse
+	inverse := make([][]float64, len(matrix))
+	for i := range inverse {
+		inverse[i] = make([]float64, len(matrix))
+		for j := 0; j < len(matrix); j++ {
+			inverse[i][j] = augmented[i][j+len(matrix)]
+		}
+	}
+	// Return the inverse or an error if not invertible
+	if det == 0 {
+		return nil, fmt.Errorf("matrix is singular and cannot be inverted")
+	}
+	// Return the inverse matrix
+	return inverse, nil
+}
