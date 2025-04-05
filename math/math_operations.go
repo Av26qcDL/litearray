@@ -925,3 +925,57 @@ func PercentileArrays(precision int, percentile float64, arrays ...[]float64) ([
 
 	return results, nil
 }
+
+func TransposeMatrix(precision int, matrix [][]float64) ([][]float64, error) {
+	// Validate precision
+	if precision < -1 || precision > 10 {
+		return nil, fmt.Errorf("precision must be between -1 and 10")
+	}
+
+	// Check if the matrix is empty
+	if len(matrix) == 0 {
+		return nil, fmt.Errorf("matrix cannot be empty")
+	}
+
+	// Check if the matrix is nil
+	if matrix == nil {
+		return nil, fmt.Errorf("matrix cannot be nil")
+	}
+
+	// Check if the matrix is a valid 2D slice
+	width := len(matrix[0])
+	for _, row := range matrix {
+		if len(row) != width {
+			return nil, fmt.Errorf("all rows in the matrix must have the same length")
+		}
+	}
+
+	// Get the dimensions of the matrix
+	length := len(matrix)
+
+	// Create a new matrix with transposed dimensions
+	result := make([][]float64, width)
+	for i := range result {
+		result[i] = make([]float64, length)
+	}
+
+	// Fill the transposed matrix
+	for i := 0; i < length; i++ {
+		for j := 0; j < width; j++ {
+			result[j][i] = matrix[i][j]
+		}
+	}
+
+	// Apply rounding if precision is non-negative
+	if precision >= 0 {
+		for i := range result {
+			for j := range result[i] {
+				factor := math.Pow(10, float64(precision)) // e.g., 10^2 for two decimal places
+				result[i][j] = math.Round(result[i][j]*factor) / factor
+			}
+		}
+	}
+
+	// Return the transposed matrix
+	return result, nil
+}

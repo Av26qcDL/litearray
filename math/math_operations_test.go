@@ -769,6 +769,50 @@ func TestPercentileArrays(t *testing.T) {
 	}
 }
 
+func TestTransposeMatrix(t *testing.T) {
+	// Test case 1: Regular matrix
+	matrix := [][]float64{{1.10000, 2.20000, 3.30000}, {4.40000, 5.50000, 6.60000}}
+	expected := [][]float64{{1.10000, 4.40000}, {2.20000, 5.50000}, {3.30000, 6.60000}}
+
+	result, err := TransposeMatrix(2, matrix)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if !compareSlices(result[0], expected[0], 0.0001) || !compareSlices(result[1], expected[1], 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Empty matrix
+	matrix = [][]float64{}
+	_, err = TransposeMatrix(2, matrix)
+	if err == nil || err.Error() != "matrix cannot be empty" {
+		t.Errorf("Expected error 'matrix cannot be empty', got %v", err)
+	}
+}
+
+func TestTransposeMatrix_InvalidInputs(t *testing.T) {
+	// Test case 1: Nil matrix
+	var matrix [][]float64
+	_, err := TransposeMatrix(2, matrix)
+	if err == nil {
+		t.Error("Expected an error for nil matrix, got none")
+	}
+
+	// Test case 2: Matrix with mismatched row lengths
+	matrix = [][]float64{{1.0, 2.0}, {3.0}}
+	_, err = TransposeMatrix(2, matrix)
+	if err == nil {
+		t.Error("Expected an error for mismatched row lengths, got none")
+	}
+
+	// Test case 3: Precision out of range
+	matrix = [][]float64{{1.0, 2.0}, {3.0, 4.0}}
+	_, err = TransposeMatrix(11, matrix) // Precision > 10
+	if err == nil {
+		t.Error("Expected an error for precision out of range, got none")
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {
