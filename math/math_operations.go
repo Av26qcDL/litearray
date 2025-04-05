@@ -980,3 +980,42 @@ func TransposeMatrix(precision int, matrix [][]float64) ([][]float64, error) {
 	// Return the transposed matrix
 	return result, nil
 }
+
+func DeterminantMatrix(matrix [][]float64) (float64, error) {
+	// Check if the matrix is square
+	if len(matrix) == 0 || len(matrix) != len(matrix[0]) {
+		return 0, fmt.Errorf("matrix must be square and non-empty")
+	}
+
+	// Base case for 2x2 matrix
+	if len(matrix) == 2 {
+		return matrix[0][0]*matrix[1][1] - matrix[0][1]*matrix[1][0], nil
+	}
+
+	// Recursive case for larger matrices
+	det := 0.0
+	for i := range matrix {
+		subMatrix := make([][]float64, len(matrix)-1)
+		for j := range subMatrix {
+			subMatrix[j] = make([]float64, len(matrix)-1)
+			for k := range subMatrix[j] {
+				if k < i {
+					subMatrix[j][k] = matrix[j+1][k]
+				} else {
+					subMatrix[j][k] = matrix[j+1][k+1]
+				}
+			}
+		}
+		sign := 1.0
+		if i%2 != 0 {
+			sign = -1.0
+		}
+		subDet, err := DeterminantMatrix(subMatrix)
+		if err != nil {
+			return 0, err
+		}
+		det += sign * matrix[0][i] * subDet
+	}
+
+	return det, nil
+}

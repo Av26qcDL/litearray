@@ -813,6 +813,28 @@ func TestTransposeMatrix_InvalidInputs(t *testing.T) {
 	}
 }
 
+// TestDeterminantMatrix tests the DeterminantMatrix function.
+func TestDeterminantMatrix(t *testing.T) {
+	// Test case 1: Regular matrix
+	matrix := [][]float64{{2, 3, 1}, {4, 5, 6}, {7, 8, 9}}
+	expected := 9.0
+
+	result, err := DeterminantMatrix(matrix)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if result != expected {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Empty matrix
+	matrix = [][]float64{}
+	_, err = DeterminantMatrix(matrix)
+	if err == nil || err.Error() != "matrix must be square and non-empty" {
+		t.Errorf("Expected error 'matrix must be square and non-empty', got %v", err)
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {
