@@ -926,6 +926,7 @@ func PercentileArrays(precision int, percentile float64, arrays ...[]float64) ([
 	return results, nil
 }
 
+// TransposeMatrix transposes a 2D matrix and supports optional rounding to a specified precision.
 func TransposeMatrix(precision int, matrix [][]float64) ([][]float64, error) {
 	// Validate precision
 	if precision < -1 || precision > 10 {
