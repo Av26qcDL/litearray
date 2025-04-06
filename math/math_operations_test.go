@@ -2,7 +2,7 @@ package litearray
 
 import (
 	"math/cmplx"
-	"testing" // Import the testing package
+	"testing"
 )
 
 func TestAddArrays(t *testing.T) {
@@ -814,7 +814,6 @@ func TestTransposeMatrix_InvalidInputs(t *testing.T) {
 	}
 }
 
-// TestDeterminantMatrix tests the DeterminantMatrix function.
 func TestDeterminantMatrix(t *testing.T) {
 	// Test case 1: Regular matrix
 	matrix := [][]float64{{2, 3, 1}, {4, 5, 6}, {7, 8, 9}}
@@ -836,7 +835,6 @@ func TestDeterminantMatrix(t *testing.T) {
 	}
 }
 
-// TestInversionMatrix tests the InversionMatrix function.
 func TestInversionMatrix(t *testing.T) {
 	// Test case 1: Regular matrix
 	matrix := [][]float64{{2, 3}, {4, 5}}
