@@ -857,6 +857,27 @@ func TestInversionMatrix(t *testing.T) {
 	}
 }
 
+func TestEigenvalues2x2(t *testing.T) {
+	// Test case 1: Regular 2x2 matrix
+	matrix := [][]float64{{4, 2}, {1, 3}}
+	expected := []float64{5.0, 2.0}
+
+	result, err := Eigenvalues2x2(matrix)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+	if !compareSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Empty matrix
+	matrix = [][]float64{}
+	_, err = Eigenvalues2x2(matrix)
+	if err == nil || err.Error() != "matrix must be 2x2" {
+		t.Errorf("Expected error 'matrix must be 2x2', got %v", err)
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {

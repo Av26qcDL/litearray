@@ -1077,3 +1077,30 @@ func InversionMatrix(matrix [][]float64) ([][]float64, error) {
 
 	return inverse, nil
 }
+
+func Eigenvalues2x2(matrix [][]float64) ([]float64, error) {
+	// Check if the matrix is 2x2
+	if len(matrix) != 2 || len(matrix[0]) != 2 || len(matrix[1]) != 2 {
+		return nil, fmt.Errorf("matrix must be 2x2")
+	}
+
+	a := matrix[0][0]
+	b := matrix[0][1]
+	c := matrix[1][0]
+	d := matrix[1][1]
+
+	// Calculate the trace and determinant
+	trace := a + d
+	det := a*d - b*c
+
+	// Calculate the eigenvalues using the quadratic formula
+	discriminant := trace*trace - 4*det
+	if discriminant < 0 {
+		return nil, fmt.Errorf("complex eigenvalues")
+	}
+
+	eigenvalue1 := (trace + math.Sqrt(discriminant)) / 2
+	eigenvalue2 := (trace - math.Sqrt(discriminant)) / 2
+
+	return []float64{eigenvalue1, eigenvalue2}, nil
+}
