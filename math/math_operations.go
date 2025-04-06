@@ -1080,6 +1080,7 @@ func InversionMatrix(matrix [][]float64) ([][]float64, error) {
 	return inverse, nil
 }
 
+// Eigenvalues2x2 computes the eigenvalues of a 2x2 matrix.
 func Eigenvalues2x2(matrix [][]float64) ([]float64, error) {
 	// Check if the matrix is 2x2
 	if len(matrix) != 2 || len(matrix[0]) != 2 || len(matrix[1]) != 2 {
