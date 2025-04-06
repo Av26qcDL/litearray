@@ -1,6 +1,7 @@
 package litearray
 
 import (
+	"math/cmplx"
 	"testing" // Import the testing package
 )
 
@@ -878,6 +879,32 @@ func TestEigenvalues2x2(t *testing.T) {
 	}
 }
 
+func TestEigenvalues3x3AndHigher(t *testing.T) {
+	// Test case 1: Regular 3x3 matrix
+	matrix := [][]float64{{4, 2, 1}, {1, 3, 2}, {2, 1, 5}}
+	expected := []complex128{
+		complex(7.14092334, 0),
+		complex(2.42953833, 0.63170371),
+		complex(2.42953833, -0.63170371),
+	}
+
+	result, err := Eigenvalues3x3AndHigher(matrix)
+	if err != nil {
+		t.Errorf("Unexpected error: %v", err)
+	}
+
+	if !compareComplexSlices(result, expected, 0.0001) {
+		t.Errorf("Expected %v, got %v", expected, result)
+	}
+
+	// Test case 2: Empty matrix
+	matrix = [][]float64{}
+	_, err = Eigenvalues3x3AndHigher(matrix)
+	if err == nil || err.Error() != "matrix must be square and non-empty" {
+		t.Errorf("Expected error 'matrix must be square and non-empty', got %v", err)
+	}
+}
+
 // compareSlices checks if two float64 slices are equal within a given tolerance.
 func compareSlices(a, b []float64, tolerance float64) bool {
 	if len(a) != len(b) {
@@ -885,6 +912,19 @@ func compareSlices(a, b []float64, tolerance float64) bool {
 	}
 	for i := range a {
 		if diff := a[i] - b[i]; diff < -tolerance || diff > tolerance {
+			return false
+		}
+	}
+	return true
+}
+
+// compareComplexSlices compares two slices of complex128 for equality within a tolerance.
+func compareComplexSlices(a, b []complex128, tolerance float64) bool {
+	if len(a) != len(b) {
+		return false
+	}
+	for i := range a {
+		if cmplx.Abs(a[i]-b[i]) > tolerance { // Use cmplx.Abs to compare complex numbers
 			return false
 		}
 	}

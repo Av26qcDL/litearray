@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"math"
 	"sort"
+
+	"gonum.org/v1/gonum/mat"
 )
 
 // AddArrays adds multiple arrays element-wise and supports optional rounding to a specified precision.
@@ -1103,4 +1105,35 @@ func Eigenvalues2x2(matrix [][]float64) ([]float64, error) {
 	eigenvalue2 := (trace - math.Sqrt(discriminant)) / 2
 
 	return []float64{eigenvalue1, eigenvalue2}, nil
+}
+
+// Eigenvalues3x3AndHigher computes the eigenvalues of a square matrix of size 3x3 or larger.
+func Eigenvalues3x3AndHigher(matrix [][]float64) ([]complex128, error) {
+	// Check if the matrix is square
+	if len(matrix) == 0 || len(matrix) != len(matrix[0]) {
+		return nil, fmt.Errorf("matrix must be square and non-empty")
+	}
+
+	n := len(matrix)
+
+	// Convert the input matrix to a Gonum Dense matrix
+	data := make([]float64, n*n)
+	for i := 0; i < n; i++ {
+		for j := 0; j < n; j++ {
+			data[i*n+j] = matrix[i][j]
+		}
+	}
+	gonumMatrix := mat.NewDense(n, n, data)
+
+	// Compute the eigenvalues using Gonum's Eigen method
+	var eig mat.Eigen
+	ok := eig.Factorize(gonumMatrix, mat.EigenNone)
+	if !ok {
+		return nil, fmt.Errorf("failed to compute eigenvalues")
+	}
+
+	// Extract the eigenvalues
+	eigenvalues := eig.Values(nil)
+
+	return eigenvalues, nil
 }
