@@ -1,6 +1,18 @@
 # LiteArray
 
-LiteArray is a lightweight Go library for performing advanced mathematical operations on arrays and matrices. It provides a wide range of functions for element-wise operations, statistical calculations, and matrix manipulations, with support for optional rounding to a specified precision.
+LiteArray is a lightweight Go library for performing advanced mathematical operations on arrays and matrices. It provides a wide range of functions for element-wise operations, statistical calculations, and matrix manipulations, with support for optional rounding to a specified precision. 
+
+## Why LiteArray?
+
+While Go has some built-in capabilities for basic array operations, it lacks the comprehensive mathematical array functionality found in languages like Python (NumPy) or MATLAB. LiteArray aims to bridge this gap by providing:
+
+- **Simplicity**: A straightforward API that's easy to learn and use
+- **Precision Control**: Unlike many libraries, LiteArray gives you explicit control over rounding precision
+- **Comprehensive Error Handling**: Clear, actionable error messages that help developers quickly identify issues
+- **Lightweight**: Minimal dependencies and efficient implementation
+- **Go-Idiomatic**: Follows Go conventions and patterns, making it feel natural to Go developers
+
+LiteArray was created to make array and matrix operations in Go as accessible and powerful as they are in data science-focused languages, while maintaining Go's performance advantages.
 
 ## Features
 
